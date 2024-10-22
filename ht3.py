@@ -1,3 +1,5 @@
+import re
+
 raw_numbers = [
     "067\\t123 4567",
     "(095) 234-5678\\n",
@@ -9,3 +11,19 @@ raw_numbers = [
     "38050-111-22-22",
     "38050 111 22 11   ",
 ]
+
+def normalize_phone(phone_number):
+
+    sanitized_number = re.sub(r'[^\d+\+]', '', phone_number.strip())
+
+    if sanitized_number.startswith('380'):
+        return '+' + sanitized_number
+    
+    if not sanitized_number.startswith('+'):
+        return '+38' + sanitized_number
+
+    return sanitized_number
+
+sanitized_numbers = [normalize_phone(num) for num in raw_numbers]
+
+print("Нормалізовані номери телефонів для SMS-розсилки:", sanitized_numbers)
